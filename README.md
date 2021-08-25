@@ -4,25 +4,63 @@
 📚参考
 
 ---
-<!-- TOC -->
-- [Classification in PyTorch](#Classification in PyTorch)
-  - [Requirements](#requirements)
-  - [Main Features](#main-features)
-    - [Models](#models)
-    - [Datasets](#datasets)
-    - [Losses](#losses)
-    - [Learning rate schedulers](#learning-rate-schedulers)
-    - [Data augmentation](#data-augmentation)
-  - [Training](#training)
-  - [Inference](#inference)
-  - [Code structure](#code-structure)
-  - [Config file format](#config-file-format)
-  - [Acknowledgement](#acknowledgement)
 
-<!-- /TOC -->
+```
+项目结构介绍
 
-This repo contains a PyTorch an implementation of different classification models for different datasets.
+-base   基础库包
+--__init__.py
+--base_dataloader.py
+--base_dataset.py
+--base_trainer.py
 
+-configs    配置文件夹
+--Middle_EfficientNetb0_CEL_SGD.json
+--...
+
+-data   数据集制作脚本
+--data-copy.py
+--data-split.py
+
+-dataloader     数据读取库包
+--__init__.py
+--edge.py
+--middle.py
+--oled.py
+
+-models     模型库包
+--__init__.py
+--alexnet.py
+--densenet.py
+--EfficientNet.py
+--inceptions.py
+--resnet.py
+
+-pretrained     预训练模型，需下载创建
+--...
+
+-utils
+--sync_batchnorm
+----...
+--__init__.py
+--del_onefile.py
+--helpers.py
+--logger.py
+--losses.py
+--lr_scheduler.py
+--metrics.py
+--transforms.py
+
+
+-.gitignore
+-environment_install.md
+-inference_middle.py    中间区域推理脚本（把所有文件放到一个list中）
+-inference_middle_.py   中间区域推理脚本
+-inference_middle_val.py    中间区域推理脚本（输出best_model.pth的混淆矩阵、CAM、预测类别和实际类别）
+
+-train.py   训练代码
+-trainer.py 训练过程具体实现
+```
 ## 1、环境/Requirements
 PyTorch and Torchvision needs to be installed before running the scripts, together with `PIL` and `opencv` for data-preprocessing and `tqdm` for showing the training progress. PyTorch v1.1 is supported (using the new supported tensoboard); can work with ealier versions, but instead of using tensoboard, use tensoboardX.
 具体参考[environment_install.md](environment_install.md)
@@ -42,10 +80,19 @@ PyTorch and Torchvision needs to be installed before running the scripts, togeth
 - efficientnet系列
 
 ### 2.2 数据集/Datasets
+#### 2.2.1 点灯小图数据
+data目录下存放了数据处理的代码。
 
-- 中间区域数据
-- 边缘区域数据
-- LCD液晶区数据
+- data-copy.py 是从最原始模型预测结果中筛选出Edge和Middle中点灯小图，无Ori
+  
+- data-split.py 是将最终所有图片划分为train和val，生成trainlist.txt、vallist.txt、labels.txt、mean_std.txt。
+  
+- del-jpg.py 是删除png（热力图）和jpg（增强图），并重新生成
+  
+- image-check.py 是检查对比 原图、Normalization后的图，Histogram拉伸后的图，先Histogram拉伸然后在Normalization的图，对比它们之间的差异，
+  输入到Model是否有影响
+  
+#### 2.2.2 LCD液晶区数据
 
 ### 2.3 损失函数/Losses
 In addition to the Cross-Entorpy loss, there is also
