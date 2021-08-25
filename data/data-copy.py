@@ -1,3 +1,8 @@
+# _*_coding:utf-8_*_
+# @auther:FelixFu
+# @Date: 2021.4.14
+# @github:https://github.com/felixfu520
+
 import os
 import json
 import shutil
@@ -72,14 +77,14 @@ def del_leisi_img(path="", pre=""):
     """
     phasher = DHash()
     folders = os.listdir(path=path)
-    # # 重命名所有文件
-    # for folder in folders:
-    #     if os.path.isfile(os.path.join(path, folder)):continue
-    #     if os.listdir(os.path.join(path, folder)) == []:continue
-    #     all_images = os.listdir(os.path.join(path, folder))
-    #     for i, image in enumerate(all_images):  # 重命名
-    #         os.rename(os.path.join(path, folder, image),
-    #                   os.path.join(path, folder, pre + "_" + folder + "_" + str(i) + ".bmp"))
+    # 重命名所有文件
+    for folder in folders:
+        if os.path.isfile(os.path.join(path, folder)):continue
+        if os.listdir(os.path.join(path, folder)) == []:continue
+        all_images = os.listdir(os.path.join(path, folder))
+        for i, image in enumerate(all_images):  # 重命名
+            os.rename(os.path.join(path, folder, image),
+                      os.path.join(path, folder, pre + "_" + folder + "_" + str(i) + ".bmp"))
 
     # 获得所有要删除的文件名
     for folder in folders:
@@ -101,17 +106,19 @@ def del_leisi_img(path="", pre=""):
 
 if __name__ == "__main__":
     # 1、从云文档中拷贝文件过来
-    # count_split(input_path=r"F:\20210805", output=r"F:\Data\lcd\origin\20210805")
+    # count_split(input_path=r"F:\2021-07-19", output=r"F:\Data\lcd\origin\20210812")
     # 2、删除Ori图片
-    # del_ori(path=r"F:\Data\lcd\origin\20210805\Edge")
-    # del_ori(path=r"F:\Data\lcd\origin\20210805\Midle")
+    del_ori(path=r"F:\Data\lcd\origin\20210812\Edge")
+    del_ori(path=r"F:\Data\lcd\origin\20210812\Midle")
 
     # 3、删除相似图片, 此函数，看情况使用
-    del_leisi_img(path=r"F:\Data\lcd\origin\20210805\Edge", pre="20210805")
-    # del_leisi_img(path=r"F:\Data\lcd\origin\20210805\Midle", pre="20210805")
+    # del_leisi_img(path=r"F:\Data\lcd\origin\20210810\Edge", pre="20210810")
+    # del_leisi_img(path=r"F:\Data\lcd\origin\20210810\Midle", pre="20210810")
+
+    # 4、执行inference_middle.py or inference_edge.py 文件
 
     # 有时候删除一些类似图片时调用——单独调用
-    # del_leisi_img(path="F:\\Data\\lcd\\midle\\20210628", pre="20210628")
+    # del_leisi_img(path=r"F:\t", pre="20210625")
 
 
 
