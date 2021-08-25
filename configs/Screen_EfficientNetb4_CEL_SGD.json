@@ -1,0 +1,103 @@
+{
+    "name": "Screen-EfficientNet_b4",
+    "n_gpu": 1,
+    "use_synch_bn": false,
+
+    "train_loader": {
+        "type": "ScreenDataLoader",
+        "args":{
+            "data_dir": "/root/data/lcd/trainval_notime_20210820",
+            "num_class": 33,
+
+            "normalize": false,
+            "mean":[0.39703156192416594],
+            "std":[0.16976514942964588],
+
+            "crop_size": 224,
+            "augment": true,
+            "base_size": 224,
+            "scale": false,
+            "flip": false,
+            "rotate": false,
+            "blur": false,
+            "histogram": true,
+
+            "num_workers": 8,
+            "batch_size": 128,
+            "shuffle": true,
+
+            "in_channels": 1
+        }
+    },
+
+    "val_loader": {
+        "type": "ScreenDataLoader",
+        "args":{
+            "data_dir": "/root/data/lcd/trainval_notime_20210820",
+
+            "crop_size": 224,
+            "histogram": true,
+
+            "batch_size": 60,
+            "num_workers": 4,
+            "in_channels": 1,
+
+            "val": true
+        }
+    },
+
+    "arch": {
+        "type": "EfficientNet_b4",
+        "num_class":33,
+        "args": {
+            "in_channels": 1,
+            "pretrained": true,
+            "freeze_bn": false
+        }
+    },
+
+
+    "loss": "CrossEntropyLoss2d",
+    "ignore_index": 255,
+    "weight": [
+        1,1,1,1,1,
+        1,1,1,1,1,
+        1,1,1,1,1,
+        1,1,1,1,1,
+        1,1,1,1,1,
+        1,1,1,1,1,
+        1,1,1
+    ],
+
+    "optimizer": {
+        "type": "SGD",
+        "args":{
+            "lr": 0.001,
+            "weight_decay": 1e-4,
+            "momentum": 0.9
+        }
+    },
+    "lr_scheduler": {
+        "type": "StepLR_",
+        "args": {
+            "step_size": 20,
+            "gamma": 0.5
+        }
+    },
+
+    "trainer": {
+        "epochs": 200,
+        "save_dir": "saved/",
+        "save_period": 1,
+
+        "monitor": "max top1",
+        "early_stop": 50,
+
+        "tensorboard": true,
+        "log_dir": "saved/runs",
+        "log_per_iter": 20,
+
+        "val": true,
+        "val_per_epochs": 1
+    }
+}
