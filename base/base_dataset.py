@@ -25,7 +25,7 @@ class BaseDataSet(Dataset):
         # Normalization
         self.mean = mean
         self.std = std
-        self.normalize = normalize
+        self.normalize_flag = normalize
 
         # 数据增强
         self.augment = augment
@@ -184,7 +184,7 @@ class BaseDataSet(Dataset):
 
         label = torch.from_numpy(np.array(label, dtype=np.int32)).long()
         image = Image.fromarray(np.uint8(image))
-        if self.normalize:
+        if self.normalize_flag:
             return self.normalize(self.to_tensor(image)), label, image_path
         return self.to_tensor(image), label, image_path
 
