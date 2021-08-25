@@ -9,7 +9,6 @@ import argparse
 import numpy as np
 
 import torch
-from torchsummary import summary
 
 from utils import Logger
 import dataloaders
@@ -19,11 +18,6 @@ from trainer import Trainer
 
 import warnings
 warnings.filterwarnings("ignore")
-
-# 绘制数据时用到
-import matplotlib.pyplot as plt
-from torchvision import transforms
-from utils import transforms as local_transforms
 
 
 def get_instance(module, name, config, *args):
@@ -36,11 +30,15 @@ def main(config, resume):
 
     # DATA LOADERS
     train_loader = get_instance(dataloaders, 'train_loader', config)
+    # # 绘制数据时用到
+    # import matplotlib.pyplot as plt
+    # from torchvision import transforms
+    # from utils import transforms as local_transforms
     # # Test train_loader
     # for data, target, image_path in train_loader:
     #     # 使用matplotlib测试
-    #     MEAN = [0.3858034032292721]
-    #     STD = [0.12712721340420535]
+    #     MEAN = config['train_loader']['args']['mean']
+    #     STD = config['train_loader']['args']['std']
     #     restore_transform = transforms.Compose([local_transforms.DeNormalize(MEAN, STD), transforms.ToPILImage()])
     #     for i, data_i in enumerate(data):
     #         image = restore_transform(data_i)
@@ -53,6 +51,7 @@ def main(config, resume):
 
     # MODEL
     model = get_instance(models, 'arch', config, train_loader.dataset.num_classes)
+    # from torchsummary import summary
     # print(f'\n{model}\n')
     # summary(model, (1, 224, 224), device="cpu")
 
@@ -76,7 +75,7 @@ def main(config, resume):
 if __name__ == '__main__':
     # PARSE THE ARGS
     parser = argparse.ArgumentParser(description='PyTorch Training')
-    parser.add_argument('-c', '--configs', default='configs/Middle_Resnet18_CEL_SGD.json', type=str, help='Path to the configs file (default: configs.json)')
+    parser.add_argument('-c', '--configs', default='configs/Screen_EfficientNetb4_CEL_SGD.json', type=str, help='Path to the configs file (default: configs.json)')
     parser.add_argument('-r', '--resume', default="", type=str, help='Path to the .pth model checkpoint to resume training')
     parser.add_argument('-d', '--device', default=None, type=str, help='indices of GPUs to enable (default: all)')
     args = parser.parse_args()
