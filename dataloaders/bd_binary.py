@@ -10,10 +10,10 @@ import cv2
 from base import BaseDataSet, BaseDataLoader
 
 
-class MiddleDataset(BaseDataSet):
+class BDBinaryDataset(BaseDataSet):
     def __init__(self, **kwargs):
-        self.num_classes = 21
-        super(MiddleDataset, self).__init__(**kwargs)
+        self.num_classes = 2
+        super(BDBinaryDataset, self).__init__(**kwargs)
 
     def _set_files(self):
         """
@@ -25,7 +25,7 @@ class MiddleDataset(BaseDataSet):
             list_path = os.path.join(self.root, "trainlist.txt")
 
         images, labels = [], []
-        with open(list_path, 'r', encoding='utf-8') as images_labels:
+        with open(list_path, 'r', encoding='gbk') as images_labels:
             for image_label in images_labels:
                 images.append(os.path.join(self.root, image_label.strip().split("____")[0], image_label.strip().split("____")[1]))
                 labels.append(image_label.strip().split("____")[2])
@@ -39,20 +39,21 @@ class MiddleDataset(BaseDataSet):
         :return:
         """
         image_path, label = self.files[index]
+        image_path = image_path.encode('utf8', errors='surrogateescape').decode('utf8')
         if self.in_channels == 1:
             # 修改支持中文路径
-            img = cv2.imdecode(np.fromfile(image_path, dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
+            img = cv2.imdecode(np.fromfile(image_path.encode('utf8'), dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
         elif self.in_channels == 3:
             img = cv2.imdecode(np.fromfile(image_path, dtype=np.uint8), cv2.IMREAD_COLOR)
         return img, label, image_path
 
 
-class MiddleDataLoader(BaseDataLoader):
+class BDBinaryDataLoader(BaseDataLoader):
     def __init__(self, data_dir,
                  base_size=None, crop_size=None, augment=False, scale=True, flip=False, rotate=False, blur=False, histogram=False,
                  batch_size=1, num_workers=1, shuffle=True,
                  in_channels=3, val=False,
-                 mean=[0.39755441968379984], std=[0.09066523780114362]):
+                 mean=[0.06615243857219116], std=[0.024300094632509827]):
         if in_channels == 3:
             self.MEAN = mean
             self.STD = std
@@ -78,7 +79,7 @@ class MiddleDataLoader(BaseDataLoader):
             'val': val
         }
 
-        self.dataset = MiddleDataset(**kwargs)
-        super(MiddleDataLoader, self).__init__(self.dataset, batch_size, shuffle, num_workers)
+        self.dataset = BDBinaryDataset(**kwargs)
+        super(BDBinaryDataLoader, self).__init__(self.dataset, batch_size, shuffle, num_workers)
 
 
