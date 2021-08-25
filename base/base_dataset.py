@@ -14,8 +14,9 @@ from torchvision import transforms
 
 
 class BaseDataSet(Dataset):
-    def __init__(self, root, mean, std,
-                 base_size=None, augment=False, crop_size=224, scale=False, flip=False, rotate=False, blur=False, histogram=False,
+    def __init__(self, root=None, mean=None, std=None, normalize=False,
+                 augment=False, base_size=None, crop_size=224, scale=False,
+                 flip=False, rotate=False, blur=False, histogram=False,
                  val=False, in_channels=1):
         # 图像路径
         self.root = root
@@ -24,11 +25,12 @@ class BaseDataSet(Dataset):
         # Normalization
         self.mean = mean
         self.std = std
+        self.normalize = normalize
 
         # 数据增强
         self.augment = augment
         self.crop_size = crop_size
-        self.histogram = False
+        self.histogram = histogram
         if self.augment:
             self.histogram = histogram
             self.base_size = base_size
@@ -82,6 +84,7 @@ class BaseDataSet(Dataset):
 
         # Histogram
         if self.histogram and self.in_channels == 1:
+            # print("val histogram!!")
             rows, cols = image.shape
             flat_gray = image.reshape((cols * rows,)).tolist()
             A = min(flat_gray)
@@ -160,6 +163,7 @@ class BaseDataSet(Dataset):
 
         # Histogram
         if self.histogram and self.in_channels == 1:
+            # print("train histogram!!")
             rows, cols = image.shape
             flat_gray = image.reshape((cols * rows,)).tolist()
             A = min(flat_gray)
@@ -180,7 +184,9 @@ class BaseDataSet(Dataset):
 
         label = torch.from_numpy(np.array(label, dtype=np.int32)).long()
         image = Image.fromarray(np.uint8(image))
-        return self.normalize(self.to_tensor(image)), label, image_path
+        if self.normalize:
+            return self.normalize(self.to_tensor(image)), label, image_path
+        return self.to_tensor(image), label, image_path
 
     def __repr__(self):
         fmt_str = "Dataset: " + self.__class__.__name__ + "\n"
