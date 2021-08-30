@@ -41,21 +41,21 @@ def rename_(path=""):
 
 
 if __name__ == "__main__":
-    # paths = ['00BD', '01BHH', '01BL', '01WL', '02BLM',
-    #         '02BLM2', '02BM', '02BM2', '02CJ', '02DBBM',
-    #         '02DY', '02ZW', '10LD', '11LL', '12LLM',
-    #         '12LM', 'aBHLM', 'aOK', 'hHYB', 'hHYH',
-    #         'hHYO', 'hHYP', 'hHYQ', 'hHYQ2', 'hHYS',
-    #         'hHYT', 'hHYV', 'hHYV2', 'hHYW', 'hHYX',
-    #         'xDWF', 'xFlag', 'xGZ', 'xKong', 'xLYJ',
-    #         'xMark', 'xMark2', 'xMoer', 'xPao', 'xPao2',
-    #         'xPao3']
-    # for p in paths:
-    #     path = os.path.join(r"F:\Data\Screen\20210820", p)
-    #     del_jpg(path)
-    #     gen_zengqiang(path)
+    paths = ['00BD', '01BHH', '01BL', '01WL', '02BLM',
+            '02BLM2', '02BM', '02BM2', '02CJ', '02DBBM',
+            '02DY', '02ZW', '10LD', '11LL', '12LLM',
+            '12LM', 'aBHLM', 'aOK', 'hHYB', 'hHYH',
+            'hHYO', 'hHYP', 'hHYQ', 'hHYQ2', 'hHYS',
+            'hHYT', 'hHYV', 'hHYV2', 'hHYW', 'hHYX',
+            'xDWF', 'xFlag', 'xGZ', 'xKong', 'xLYJ',
+            'xMark', 'xMark2', 'xMoer', 'xPao', 'xPao2',
+            'xPao3']
+    for p in os.listdir(r"F:\Data\Screen\TODO"):
+        path = os.path.join(r"F:\Data\Screen\TODO", p)
+        del_jpg(path)
+        gen_zengqiang(path)
 
+    # path = r"F:\Data\Screen\20210823\xPao"
+    # del_jpg(path)
+    # gen_zengqiang(path)
     # rename_(path)
-    path = r"F:\TODO\24_xDWF"
-    del_jpg(path)
-    gen_zengqiang(path)
