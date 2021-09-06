@@ -11,7 +11,7 @@ import cv2
 def del_jpg(path=""):
     for root, dirs, files in os.walk(path, topdown=False):
         for file in files:
-            if file[-4:] == ".jpg" or file[-4:] == ".png":
+            if not file[-4:] == ".bmp":
                 print("delete {}".format(os.path.join(root, file)))
                 os.remove(os.path.join(root, file))
 
@@ -41,21 +41,21 @@ def rename_(path=""):
 
 
 if __name__ == "__main__":
-    paths = ['00BD', '01BHH', '01BL', '01WL', '02BLM',
-            '02BLM2', '02BM', '02BM2', '02CJ', '02DBBM',
-            '02DY', '02ZW', '10LD', '11LL', '12LLM',
-            '12LM', 'aBHLM', 'aOK', 'hHYB', 'hHYH',
-            'hHYO', 'hHYP', 'hHYQ', 'hHYQ2', 'hHYS',
-            'hHYT', 'hHYV', 'hHYV2', 'hHYW', 'hHYX',
-            'xDWF', 'xFlag', 'xGZ', 'xKong', 'xLYJ',
-            'xMark', 'xMark2', 'xMoer', 'xPao', 'xPao2',
-            'xPao3']
-    for p in os.listdir(r"F:\Data\Screen\TODO"):
-        path = os.path.join(r"F:\Data\Screen\TODO", p)
-        del_jpg(path)
-        gen_zengqiang(path)
+    # paths = ['00BD', '01BHH', '01BL', '01WL', '02BLM',
+    #         '02BLM2', '02BM', '02BM2', '02CJ', '02DBBM',
+    #         '02DY', '02ZW', '10LD', '11LL', '12LLM',
+    #         '12LM', 'aBHLM', 'aOK', 'hHYB', 'hHYH',
+    #         'hHYO', 'hHYP', 'hHYQ', 'hHYQ2', 'hHYS',
+    #         'hHYT', 'hHYV', 'hHYV2', 'hHYW', 'hHYX',
+    #         'xDWF', 'xFlag', 'xGZ', 'xKong', 'xLYJ',
+    #         'xMark', 'xMark2', 'xMoer', 'xPao', 'xPao2',
+    #         'xPao3']
+    # for p in os.listdir(r"F:\Data\Screen\TODO"):
+    #     path = os.path.join(r"F:\Data\Screen\TODO", p)
+    #     del_jpg(path)
+    #     gen_zengqiang(path)
 
-    # path = r"F:\Data\Screen\20210823\xPao"
+    path = r"F:\Data\Screen\trainval"
     # del_jpg(path)
     # gen_zengqiang(path)
-    # rename_(path)
+    rename_(path)

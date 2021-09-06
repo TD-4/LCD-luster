@@ -12,12 +12,13 @@ import time
 
 
 def rename_all_images(path=""):
-    all_folder = os.listdir(path)
+    all_folder = [ p for p in os.listdir(path) if os.path.isdir(os.path.join(path,p))]
     for folder in all_folder:
-        all_images = os.listdir(os.path.join(path, folder))
+        all_images = [img for img in os.listdir(os.path.join(path, folder)) if img.endswith("bmp")]
         for i, img_p in enumerate(all_images):
-            os.rename(os.path.join(path, folder, img_p),
-                      os.path.join(path, folder, folder+"_"+str(time.time()).split(".")[0]+str(time.time()).split(".")[1]+"_"+str(i)+".bmp"))
+            dst_name = folder+"_"+str(time.time()).split(".")[0]+str(time.time()).split(".")[1]+"_"+str(i)
+            os.rename(os.path.join(path, folder, img_p), os.path.join(path, folder, dst_name + ".bmp"))
+            os.rename(os.path.join(path, folder, img_p[:-4]+".jpg"), os.path.join(path, folder, dst_name + ".jpg"))
 
 
 def cmp(x,y):
@@ -25,7 +26,7 @@ def cmp(x,y):
     return int(y) - int(x)
 
 
-def split_dataset(path="", train_ratio=0.9, shuffle=True, range_=(2000, 2400)):
+def split_dataset(path="", train_ratio=0.9, shuffle=True, range_=(2000, 3000)):
     all_folders = [folder for folder in os.listdir(path) if os.path.isdir(os.path.join(path, folder))]
     all_folders.sort(key=functools.cmp_to_key(cmp), reverse=True)
     train_labels = os.path.join(path, "trainlist.txt")
@@ -36,7 +37,7 @@ def split_dataset(path="", train_ratio=0.9, shuffle=True, range_=(2000, 2400)):
         for folder in all_folders:  # 处理每个文件夹
             label = folder.split("_")   # 获取标签
             # 写入labels
-            labels_file.write("{}:{}\n".format(int(label[0]), label[1]))
+            # labels_file.write("{}:{}\n".format(int(label[0]), label[1]))
 
             all_images = [img_p for img_p in os.listdir(os.path.join(path, folder)) if img_p[-4:]==".bmp"]
             n_total = min(random.randint(range_[0], range_[1]), len(all_images))  # 控制每类样本数量
@@ -70,6 +71,7 @@ def gen_mean_std(root_path=""):
     count = 0
     for line in all_images:
         line = os.path.join(root_path, line.strip().split("____")[0], line.strip().split("____")[1])
+        print("mean:", line)
         img = cv2.imdecode(np.fromfile(line, dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
         img = img / 255.0
         gray_channel += np.sum(img)
@@ -82,6 +84,7 @@ def gen_mean_std(root_path=""):
     count = 0
     for line in all_images:
         line = os.path.join(root_path, line.strip().split("____")[0], line.strip().split("____")[1])
+        print("std:", line)
         img = cv2.imdecode(np.fromfile(line, dtype=np.uint8), cv2.IMREAD_GRAYSCALE)
         img = img / 255.0
         gray_channel = gray_channel + np.sum((img - gray_channel_mean)**2)
@@ -95,11 +98,11 @@ def gen_mean_std(root_path=""):
 
 if __name__ == "__main__":
     # dirname, filename = os.path.split(os.path.abspath(__file__))
-    dirname = r"F:\Data\Screen\trainval_notime_20210820"
+    dirname = r"F:\Data\Screen\trainval"
     # 1、重命名所有图片文件，将中文改成英文
-    rename_all_images(dirname)
+    # rename_all_images(dirname)
     # 2、将数据划分为train和val
-    split_dataset(path=dirname, train_ratio=0.9)
+    # split_dataset(path=dirname, train_ratio=0.9)
     # 3、获得所有train图片的均值与方差
     gen_mean_std(root_path=dirname)
 
