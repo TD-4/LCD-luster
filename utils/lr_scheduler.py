@@ -50,8 +50,9 @@ if __name__ == "__main__":
     iters_per_epoch = 10
     lrs = []
     mementums = []
+    lr_scheduler = Poly(optimizer, 200, 10)
     # lr_scheduler = StepLR_(optimizer, 10, 0.1)
-    lr_scheduler = ConsineAnnealingLR_(optimizer, 10, 0)
+    # lr_scheduler = ConsineAnnealingLR_(optimizer, 10, 0.2)
     for epoch in range(epochs):
         for i in range(iters_per_epoch):
             pass
