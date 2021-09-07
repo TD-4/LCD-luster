@@ -75,7 +75,7 @@ def main(config, resume):
 if __name__ == '__main__':
     # PARSE THE ARGS
     parser = argparse.ArgumentParser(description='PyTorch Training')
-    parser.add_argument('-c', '--configs', default='configs/Screen_EfficientNetb4_CEL_SGD.json', type=str, help='Path to the configs file (default: configs.json)')
+    parser.add_argument('-c', '--configs', default='configs/Screen_EfficientNetb0_CEL_SGD.json', type=str, help='Path to the configs file (default: configs.json)')
     parser.add_argument('-r', '--resume', default="", type=str, help='Path to the .pth model checkpoint to resume training')
     parser.add_argument('-d', '--device', default=None, type=str, help='indices of GPUs to enable (default: all)')
     args = parser.parse_args()

@@ -6,8 +6,8 @@
     "train_loader": {
         "type": "ScreenDataLoader",
         "args":{
-            "data_dir": "/root/data/lcd/trainval_notime_20210820",
-            "num_class": 33,
+            "data_dir": "/root/data/datasets/classification/screen/trainval",
+            "num_class": 38,
 
             "normalize": false,
             "mean":[0.39703156192416594],
@@ -23,7 +23,7 @@
             "histogram": true,
 
             "num_workers": 8,
-            "batch_size": 128,
+            "batch_size": 256,
             "shuffle": true,
 
             "in_channels": 1
@@ -33,12 +33,12 @@
     "val_loader": {
         "type": "ScreenDataLoader",
         "args":{
-            "data_dir": "/root/data/lcd/trainval_notime_20210820",
+            "data_dir": "/root/data/datasets/classification/screen/trainval",
 
             "crop_size": 224,
             "histogram": true,
 
-            "batch_size": 60,
+            "batch_size": 256,
             "num_workers": 4,
             "in_channels": 1,
 
@@ -48,7 +48,7 @@
 
     "arch": {
         "type": "EfficientNet_b0",
-        "num_class":33,
+        "num_class":38,
         "args": {
             "in_channels": 1,
             "pretrained": true,
@@ -60,6 +60,7 @@
     "loss": "CrossEntropyLoss2d",
     "ignore_index": 255,
     "weight": [
+        1,1,1,1,1,
         1,1,1,1,1,
         1,1,1,1,1,
         1,1,1,1,1,

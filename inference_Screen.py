@@ -118,7 +118,7 @@ def main():
             # CAM图
             mean = config['train_loader']['args']['mean']
             std = config['train_loader']['args']['std']
-            restore_transform = transforms.Compose([local_transforms.DeNormalize(mean, std), transforms.ToPILImage()])
+            restore_transform = transforms.Compose([transforms.ToPILImage()])   # local_transforms.DeNormalize(mean, std),
             img_o = restore_transform(img[1])
 
             activation_map = cam_extractor(output.cpu().squeeze(0).argmax().item(), output.cpu())
@@ -183,11 +183,11 @@ def main():
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Inference')
-    parser.add_argument('-c', '--configs', default='configs/Screen_EfficientNetb4_CEL_SGD.json', type=str, help='The configs used to train the model')
-    parser.add_argument('-m', '--model', default='pretrained/b4_best.pth', type=str, help='Path to the .pth model checkpoint to be used in the prediction')
+    parser.add_argument('-c', '--configs', default='configs/Screen_EfficientNetb0_CEL_SGD.json', type=str, help='The configs used to train the model')
+    parser.add_argument('-m', '--model', default='pretrained/b0_best.pth', type=str, help='Path to the .pth model checkpoint to be used in the prediction')
     parser.add_argument('-i', '--images', default=r"F:\Data\Screen\TODO", type=str, help='Path to the images to be segmented')
     parser.add_argument('-o', '--outputs', default=r'F:\TODO', type=str, help='Output Path')
-    parser.add_argument('-l', '--labels', default=r'F:\Data\Screen\trainval_notime_20210820\labels.txt', type=str, help='label Path')
+    parser.add_argument('-l', '--labels', default=r'F:\Data\Screen\trainval\labels.txt', type=str, help='label Path')
     args = parser.parse_args()
     return args
 
